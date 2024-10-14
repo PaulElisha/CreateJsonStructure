@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {Test, console} from "forge-std/Test.sol";
+import "forge-std/StdJson.sol";
 import "../src/CreateJsonStruct.sol";
 
 contract CreateJsonTest is Test {

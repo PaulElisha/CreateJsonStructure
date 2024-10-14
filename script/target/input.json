@@ -1,0 +1,15 @@
+{
+    "kaia": {
+        "network": "testnet",
+        "chainid": "1001",
+        "developers": [
+            "xx",
+            "oo",
+            "ppp"
+        ]
+    },
+    "base": {
+        "network": "testnet",
+        "chainid": "8354"
+    }
+}

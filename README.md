@@ -25,79 +25,78 @@ To every 'start' method, ensure you close them with the required functions.
 
 ## Usage
 
+- Create a target file in your script folder. In this case, I used this path: "script/target/input.json"
+- Assign the target file to a variable like this: `string private constant INPUT_PATH = "script/target/input.json"`;
+- Copy the fs_permissions configuration in the foundry.toml file and paste in your foundry config file
+
+- Example: 
+
 ```solidity
-    // SPDX-License-Identifier: MIT
-    pragma solidity ^0.8.0;
+// SPDX-License-Identifier: SEE LICENSE IN LICENSE
+pragma solidity ^0.8.0;
 
-    import "../src/CreateJsonStruct.sol";
+import "forge-std/Script.sol";
+import "forge-std/StdJson.sol";
+import "../src/CreateJsonStruct.sol";
 
-    contract CreateJsonTest  {
-        CreateJsonStruct createJsonStruct = new CreateJsonStruct();
+contract CreateJsonStructScript is Script {
+    CreateJsonStruct createJsonStruct = new CreateJsonStruct();
+    string private constant INPUT_PATH = "script/target/input.json";
 
-        function testMainJsonObjectIsEmpty() public {
-            createJsonStruct.startMainObject();
-            createJsonStruct.closeMainObject();
-
-            string memory jsonObject = createJsonStruct.getJson();
-            console.log(jsonObject);
-            assertEq(jsonObject, "{}");
-        }
-
-        function testCreateAStartObject() public {
-            createJsonStruct.startMainObject();
-            createJsonStruct.startObject("mainnet");
-            createJsonStruct.addKeyValuePairWithUint("chainid", 1);
-            createJsonStruct.closeObject();
-            createJsonStruct.closeMainObject();
-
-            string memory jsonObject = createJsonStruct.getJson();
-            console.log(jsonObject);
-            assertEq(jsonObject, '{"mainnet": {"chainid": 1}}');
-        }
-
-        function testCreateArray() public {
-            createJsonStruct.startMainObject();
-
-            createJsonStruct.startObject("kaia");
-
-            createJsonStruct.addKeyValuePairWithString("network", "testnet");
-            createJsonStruct.addKeyValuePairWithString("chainid", "1001");
-
-            createJsonStruct.startArray("developers");
-            createJsonStruct.addArrayElementWithString("xx");
-            createJsonStruct.addArrayElementWithString("oo");
-            createJsonStruct.addArrayElementWithString("pp");
-            createJsonStruct.closeArray();
-
-            createJsonStruct.closeObject();
-
-            createJsonStruct.startObject("base");
-            createJsonStruct.addKeyValuePairWithString("network", "testnet");
-            createJsonStruct.addKeyValuePairWithString("chainid", "8354");
-            createJsonStruct.closeObject();
-            createJsonStruct.closeMainObject();
-
-            string memory jsonObject = createJsonStruct.getJson();
-            console.log(jsonObject);
-        }
+    function run() public {
+        string memory jsonObject = getJson();
+        vm.writeFile(INPUT_PATH, jsonObject);
     }
 
+    function getJson() public returns (string memory jsonObject) {
+        createJsonStruct.startMainObject();
+
+        createJsonStruct.startObject("kaia");
+
+        createJsonStruct.addKeyValuePairWithString("network", "testnet");
+        createJsonStruct.addKeyValuePairWithString("chainid", "1001");
+
+        createJsonStruct.startArray("developers");
+        createJsonStruct.addArrayElementWithString("xx");
+        createJsonStruct.addArrayElementWithString("oo");
+        createJsonStruct.addArrayElementWithString("ppp");
+        createJsonStruct.closeArray();
+
+        createJsonStruct.closeObject();
+
+        createJsonStruct.startObject("base");
+        createJsonStruct.addKeyValuePairWithString("network", "testnet");
+        createJsonStruct.addKeyValuePairWithString("chainid", "8354");
+        createJsonStruct.closeObject();
+        createJsonStruct.closeMainObject();
+
+        jsonObject = createJsonStruct.getJson();
+
+        console.log("file has been written to script/target/input.json");
+
+    }
+}
+
+
 ```
-## Test Output
+## Output
 
 ```shell
-    Ran 3 tests for test/CreateJson.t.sol:CreateJsonTest
-[PASS] testCreateAStartObject() (gas: 53109)
-Logs:
-  {"mainnet": {"chainid": 1}}
-
-[PASS] testCreateArray() (gas: 226954)
-Logs:
-  {"kaia": {"network": "testnet","chainid": "1001","developers": ["xx","oo","pp"]}, "base": {"network": "testnet","chainid": "8354"}}
-
-[PASS] testMainJsonObjectIsEmpty() (gas: 60915)
-Logs:
-  {}
+{
+    "kaia": {
+        "network": "testnet",
+        "chainid": "1001",
+        "developers": [
+            "xx",
+            "oo",
+            "ppp"
+        ]
+    },
+    "base": {
+        "network": "testnet",
+        "chainid": "8354"
+    }
+}
 ```
 ## Documentation
 
