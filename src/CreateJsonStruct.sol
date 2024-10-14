@@ -111,84 +111,13 @@ contract CreateJsonStruct {
     }
 
     // Start an object without a key (for nested structures)
-    function startNestedObject() public {
+    function _startNestedObjectInArray(
+        string memory key,
+        string memory value
+    ) internal {
         _checkJson();
-        json = string(abi.encodePacked(json, "{"));
+        json = string(abi.encodePacked("{", '"', key, '": "', value, '"'));
         isObjectOpen = true;
-    }
-
-    // Add nested object
-    function addNestedObject(
-        string memory parentKey,
-        string memory nestedKey,
-        string memory nestedValue
-    ) public {
-        startObject(parentKey);
-        addKeyValuePairWithString(nestedKey, nestedValue);
-        closeObject();
-    }
-
-    // Nested object with uint value
-    function addNestedObjectWithUint(
-        string memory parentKey,
-        string memory nestedKey,
-        uint value
-    ) public {
-        startObject(parentKey);
-        addKeyValuePairWithUint(nestedKey, value);
-        closeObject();
-    }
-
-    // Nested object with int value
-    function addNestedObjectWithInt(
-        string memory parentKey,
-        string memory nestedKey,
-        int value
-    ) public {
-        startObject(parentKey);
-        addKeyValuePairWithInt(nestedKey, value);
-        closeObject();
-    }
-
-    // Nested object with boolean value
-    function addNestedObjectWithBool(
-        string memory parentKey,
-        string memory nestedKey,
-        bool value
-    ) public {
-        startObject(parentKey);
-        addKeyValuePairWithBool(nestedKey, value);
-        closeObject();
-    }
-
-    // Nested object with address value
-    function addNestedObjectWithAddress(
-        string memory parentKey,
-        string memory nestedKey,
-        address value
-    ) public {
-        startObject(parentKey);
-        addKeyValuePairWithAddress(nestedKey, value);
-        closeObject();
-    }
-
-    // Nested object with bytes value
-    function addNestedObjectWithBytes(
-        string memory parentKey,
-        string memory nestedKey,
-        bytes memory value
-    ) public {
-        startObject(parentKey);
-        addKeyValuePairWithBytes(nestedKey, value);
-        closeObject();
-    }
-
-    // Nested array of objects example
-    function addNestedObjectInArray(string memory arrayKey) public {
-        startArray(arrayKey);
-        startNestedObject();
-        closeObject();
-        closeArray();
     }
 
     // Start an array
@@ -205,27 +134,27 @@ contract CreateJsonStruct {
     }
 
     // Add an element to an array (for string values)
-    function addArrayElement(string memory value) public {
+    function addArrayElementWithString(string memory value) public {
         _checkJson();
         json = string(abi.encodePacked(json, '"', value, '"'));
     }
 
-    function addArrayElement(uint value) public {
+    function addArrayElementWithUint(uint value) public {
         _checkJson();
         json = string(abi.encodePacked(json, LibJsonUtils.uint2str(value)));
     }
 
-    function addArrayElement(int value) public {
+    function addArrayElementWithInt(int value) public {
         _checkJson();
         json = string(abi.encodePacked(json, LibJsonUtils.int2str(value)));
     }
 
-    function addArrayElement(bool value) public {
+    function addArrayElementWithBool(bool value) public {
         _checkJson();
         json = string(abi.encodePacked(json, value ? "true" : "false"));
     }
 
-    function addArrayElement(address value) public {
+    function addArrayElementWithAddress(address value) public {
         _checkJson();
         json = string(
             abi.encodePacked(
@@ -237,7 +166,7 @@ contract CreateJsonStruct {
         );
     }
 
-    function addArrayElement(bytes memory value) public {
+    function addArrayElementWithBytes(bytes memory value) public {
         _checkJson();
         json = string(
             abi.encodePacked(json, '"', LibJsonUtils.bytesToHex(value), '"')
@@ -260,12 +189,21 @@ contract CreateJsonStruct {
 
     function _checkJson() internal {
         bytes memory jsonBytes = bytes(json);
-        if (jsonBytes.length > 0) {
-            bytes1 lastChar = jsonBytes[jsonBytes.length - 1];
-
-            if (lastChar != "{" || lastChar != "[") {
-                json = string(abi.encodePacked(json));
+        if (bytes(json).length > 1 && (isObjectOpen || isArrayOpen)) {
+            if (
+                jsonBytes[jsonBytes.length - 1] != "{" &&
+                jsonBytes[jsonBytes.length - 1] != "["
+            ) {
+                json = string(abi.encodePacked(json, ","));
             }
         }
+        // bytes memory jsonBytes = bytes(json);
+        // if (jsonBytes.length > 0) {
+        //     bytes1 lastChar = jsonBytes[jsonBytes.length - 1];
+
+        //     if (lastChar != "{" || lastChar != "[") {
+        //         json = string(abi.encodePacked(json));
+        //     }
+        // }
     }
 }

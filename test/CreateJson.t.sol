@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
 import {Test, console} from "forge-std/Test.sol";
@@ -30,5 +30,31 @@ contract CreateJsonTest is Test {
         string memory jsonObject = createJsonStruct.getJson();
         console.log(jsonObject);
         assertEq(jsonObject, '{"mainnet": {"chainid": 1}}');
+    }
+
+    function testCreateArray() public {
+        createJsonStruct.startMainObject();
+
+        createJsonStruct.startObject("kaia");
+
+        createJsonStruct.addKeyValuePairWithString("network", "testnet");
+        createJsonStruct.addKeyValuePairWithString("chainid", "1001");
+
+        createJsonStruct.startArray("developers");
+        createJsonStruct.addArrayElementWithString("zxStim");
+        createJsonStruct.addArrayElementWithString("oxpampam");
+        createJsonStruct.addArrayElementWithString("paul");
+        createJsonStruct.closeArray();
+
+        createJsonStruct.closeObject();
+
+        createJsonStruct.startObject("base");
+        createJsonStruct.addKeyValuePairWithString("network", "testnet");
+        createJsonStruct.addKeyValuePairWithString("chainid", "8354");
+        createJsonStruct.closeObject();
+        createJsonStruct.closeMainObject();
+
+        string memory jsonObject = createJsonStruct.getJson();
+        console.log(jsonObject);
     }
 }
