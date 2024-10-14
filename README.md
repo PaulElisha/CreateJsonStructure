@@ -64,9 +64,9 @@ To every 'start' method, ensure you close them with the required functions.
             createJsonStruct.addKeyValuePairWithString("chainid", "1001");
 
             createJsonStruct.startArray("developers");
-            createJsonStruct.addArrayElementWithString("zxStim");
-            createJsonStruct.addArrayElementWithString("oxpampam");
-            createJsonStruct.addArrayElementWithString("paul");
+            createJsonStruct.addArrayElementWithString("xx");
+            createJsonStruct.addArrayElementWithString("oo");
+            createJsonStruct.addArrayElementWithString("pp");
             createJsonStruct.closeArray();
 
             createJsonStruct.closeObject();
