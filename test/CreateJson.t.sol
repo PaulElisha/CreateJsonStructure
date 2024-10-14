@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.0;
 
 import {Test, console} from "forge-std/Test.sol";
 import "../src/CreateJsonStruct.sol";
@@ -41,9 +41,9 @@ contract CreateJsonTest is Test {
         createJsonStruct.addKeyValuePairWithString("chainid", "1001");
 
         createJsonStruct.startArray("developers");
-        createJsonStruct.addArrayElementWithString("zxStim");
-        createJsonStruct.addArrayElementWithString("oxpampam");
-        createJsonStruct.addArrayElementWithString("paul");
+        createJsonStruct.addArrayElementWithString("xx");
+        createJsonStruct.addArrayElementWithString("oo");
+        createJsonStruct.addArrayElementWithString("ppp");
         createJsonStruct.closeArray();
 
         createJsonStruct.closeObject();

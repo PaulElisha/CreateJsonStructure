@@ -111,12 +111,12 @@ contract CreateJsonStruct {
     }
 
     // Start an object without a key (for nested structures)
-    function _startNestedObjectInArray(
+    function startNestedObjectInArray(
         string memory key,
         string memory value
-    ) internal {
+    ) public {
         _checkJson();
-        json = string(abi.encodePacked("{", '"', key, '": "', value, '"'));
+        json = string(abi.encodePacked("{", '"', key, '": "', value, '"', "}"));
         isObjectOpen = true;
     }
 
