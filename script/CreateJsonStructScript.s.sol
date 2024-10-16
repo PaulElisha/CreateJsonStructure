@@ -38,7 +38,7 @@ contract CreateJsonStructScript is Script {
 
         jsonObject = createJsonStruct.getJson();
 
-        console.log(jsonObject, "has been written to script/target/input.json");
+        console.log("file has been written to script/target/input.json");
         // assertEq(jsonObject, "{}");
     }
 }

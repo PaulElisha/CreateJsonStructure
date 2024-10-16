@@ -7,9 +7,9 @@ import "./LibJsonUtils.sol";
 contract CreateJsonStruct {
     using stdJson for string;
 
-    string internal json;
-    bool internal isObjectOpen = false;
-    bool internal isArrayOpen = false;
+    string private json;
+    bool private isObjectOpen = false;
+    bool private isArrayOpen = false;
 
     // Entry point to creating a json object
     function startMainObject() public {
@@ -24,7 +24,7 @@ contract CreateJsonStruct {
 
     // Start the JSON object
     function startObject(string memory key) public {
-        _checkJson();
+        _dataChecks();
         json = string(abi.encodePacked(json, '"', key, '": {'));
         isObjectOpen = true;
     }
@@ -40,13 +40,13 @@ contract CreateJsonStruct {
         string memory key,
         string memory value
     ) public {
-        _checkJson();
+        _dataChecks();
         json = string(abi.encodePacked(json, '"', key, '": "', value, '"'));
     }
 
     // Add a key-value pair to the current object (for uint values)
     function addKeyValuePairWithUint(string memory key, uint value) public {
-        _checkJson();
+        _dataChecks();
         json = string(
             abi.encodePacked(
                 json,
@@ -60,7 +60,7 @@ contract CreateJsonStruct {
 
     // Add key-value pairs for int values
     function addKeyValuePairWithInt(string memory key, int value) public {
-        _checkJson();
+        _dataChecks();
         json = string(
             abi.encodePacked(json, '"', key, '": ', LibJsonUtils.int2str(value))
         );
@@ -68,7 +68,7 @@ contract CreateJsonStruct {
 
     // Add key-value pairs for boolean values
     function addKeyValuePairWithBool(string memory key, bool value) public {
-        _checkJson();
+        _dataChecks();
         json = string(
             abi.encodePacked(json, '"', key, '": ', value ? "true" : "false")
         );
@@ -79,7 +79,7 @@ contract CreateJsonStruct {
         string memory key,
         address value
     ) public {
-        _checkJson();
+        _dataChecks();
         json = string(
             abi.encodePacked(
                 json,
@@ -97,7 +97,7 @@ contract CreateJsonStruct {
         string memory key,
         bytes memory value
     ) public {
-        _checkJson();
+        _dataChecks();
         json = string(
             abi.encodePacked(
                 json,
@@ -115,14 +115,14 @@ contract CreateJsonStruct {
         string memory key,
         string memory value
     ) public {
-        _checkJson();
+        _dataChecks();
         json = string(abi.encodePacked("{", '"', key, '": "', value, '"', "}"));
         isObjectOpen = true;
     }
 
     // Start an array
     function startArray(string memory key) public {
-        _checkJson();
+        _dataChecks();
         json = string(abi.encodePacked(json, '"', key, '": ['));
         isArrayOpen = true;
     }
@@ -135,27 +135,27 @@ contract CreateJsonStruct {
 
     // Add an element to an array (for string values)
     function addArrayElementWithString(string memory value) public {
-        _checkJson();
+        _dataChecks();
         json = string(abi.encodePacked(json, '"', value, '"'));
     }
 
     function addArrayElementWithUint(uint value) public {
-        _checkJson();
+        _dataChecks();
         json = string(abi.encodePacked(json, LibJsonUtils.uint2str(value)));
     }
 
     function addArrayElementWithInt(int value) public {
-        _checkJson();
+        _dataChecks();
         json = string(abi.encodePacked(json, LibJsonUtils.int2str(value)));
     }
 
     function addArrayElementWithBool(bool value) public {
-        _checkJson();
+        _dataChecks();
         json = string(abi.encodePacked(json, value ? "true" : "false"));
     }
 
     function addArrayElementWithAddress(address value) public {
-        _checkJson();
+        _dataChecks();
         json = string(
             abi.encodePacked(
                 json,
@@ -167,7 +167,7 @@ contract CreateJsonStruct {
     }
 
     function addArrayElementWithBytes(bytes memory value) public {
-        _checkJson();
+        _dataChecks();
         json = string(
             abi.encodePacked(json, '"', LibJsonUtils.bytesToHex(value), '"')
         );
@@ -178,16 +178,16 @@ contract CreateJsonStruct {
     }
 
     // // Internal comma handling for objects
-    // function _checkJson() internal {
+    // function _dataChecks() internal {
     //     _isCommaNeeded();
     // }
 
     // // Internal comma handling for arrays
-    // function _checkJson() internal {
+    // function _dataChecks() internal {
     //     _isCommaNeeded();
     // }
 
-    function _checkJson() internal {
+    function _dataChecks() internal {
         bytes memory jsonBytes = bytes(json);
         if (bytes(json).length > 1 && (isObjectOpen || isArrayOpen)) {
             if (
