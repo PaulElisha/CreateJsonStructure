@@ -16,9 +16,9 @@ forge install PaulElisha/CreateJsonStructure
 
 - startMainObject - Entry point to creating a Json data.
 - startObject - Entry point to creating an object.
-- addKeyValuePairWithString - Used for add key-value pair.
+- addKeyValuePairWith<dataType> - Used for add key-value pair.
 - startNestedObjectInArray - Used for creating nested object in an array.
-- addArrayElementWithString - Used to add array element.
+- addArrayElementWith<dataType> - Used to add array element.
 - StartArray - Used to start an array.
 
 To every 'start' method, ensure you close them with the required functions.
@@ -27,7 +27,7 @@ To every 'start' method, ensure you close them with the required functions.
 
 - Create a target file in your script folder. In this case, I used this path: "script/target/input.json"
 - Assign the target file to a variable like this: `string private constant INPUT_PATH = "script/target/input.json"`;
-- Copy the fs_permissions configuration in the foundry.toml file and paste in your foundry config file
+- Copy the fs_permissions configuration in the foundry.toml file and paste in your foundry config file to enable write permission to access your project directory, it works for read permission too.
 
 - Example: 
 
